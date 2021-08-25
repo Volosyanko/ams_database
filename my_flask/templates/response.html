@@ -1,0 +1,46 @@
+<h3>{{numrows}} Compounds Found</h3>
+<table class="table table-striped custab">
+  <thead>
+      <tr>
+         <th>CompoundName</th>
+         <th>ChemicalFormula</th>
+         <th>Ionization</th>
+         <th>ExtractedMass</th>
+         <th>RT</th>
+         <th>CollisionEnergy</th>
+         <th>ConfirmExtracted1</th>
+         <th>ConfirmExtracted2</th>
+         <th>ConfirmPrecursor3</th>
+         <th>ConfirmExtracted3</th>
+         <th>ConfirmEnergy3</th>
+         <th>ConfirmExtracted4</th>
+         <th>Fragment1</th>
+         <th>Fragment2</th>
+         <th>Fragment3</th>
+         <th>Fragment4</th>
+         <th>Fragment5</th>
+      </tr>
+  </thead>
+  <tbody>
+{% for row in newnitromix1 %}
+   <tr>
+    <td>{{row.CompoundName}}</td>
+    <td>{{row.ChemicalFormula}}</td>
+    <td>{{row.Ionization}}</td>
+    <td>{{row.ExtractedMass}}</td>
+    <td>{{row.RT}}</td>
+    <td>{{row.CollisionEnergy}}</td>
+    <td>{{row.ConfirmExtracted1}}</td>
+    <td>{{row.ConfirmExtracted2}}</td>
+    <td>{{row.ConfirmPrecursor3}}</td>
+    <td>{{row.ConfirmExtracted3}}</td>
+    <td>{{row.ConfirmEnergy3}}</td>
+    <td>{{row.ConfirmExtracted4}}</td>
+    <td>{{row.CompoundName}}</td>
+    <td>{{row.Fragment1}}</td>
+    <td>{{row.Fragment2}}</td>
+    <td>{{row.Fragment3}}</td>
+    <td>{{row.Fragment4}}</td>
+    <td>{{row.Fragment5}}</td>
+   </tr>
+{% endfor %}

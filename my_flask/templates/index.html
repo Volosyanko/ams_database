@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WACL Organic Aerosol Mass Spectra Database</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            load_data();
+
+            function load_data(query) {
+                $.ajax({
+                    url: "/allsearch",
+                    method: "POST",
+                    data: {query: query},
+                    success: function (data) {
+                        $('#result').html(data);
+                        $("#result").append(data.htmlresponse);
+                    }
+                });
+            }
+
+            $('#search_text').keyup(function () {
+                var search = $(this).val();
+                if (search != '') {
+                    load_data(search);
+                } else {
+                    load_data();
+                }
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#export-btn').click(function () {
+                var form = JSON.stringify($('#data').serializeArray());
+                $.ajax({
+                    type: 'POST',
+                    url: '/download',
+                    data: form,
+                    datatype: 'json',
+                    xhrFields: {
+                        responseType: 'arraybuffer'
+                    },
+                    success: function (data) {
+                        var downloadLink = document.createElement('a');
+                        var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                        var url = window.URL || window.webkitURL;
+                        var downloadUrl = url.createObjectURL(blob);
+                        var fileName = 'export.xlsx';
+
+
+                        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                            window.navigator.msSaveBlob(blob, fileName);
+                        } else {
+                            if (fileName) {
+                                if (typeof downloadLink.download === 'undefined') {
+                                    window.location = downloadUrl;
+                                } else {
+                                    downloadLink.href = downloadUrl;
+                                    downloadLink.download = fileName;
+                                    document.body.appendChild(downloadLink);
+                                    downloadLink.click();
+                                }
+                            } else {
+                                window.location = downloadUrl;
+                            }
+
+                            setTimeout(function () {
+                                    url.revokeObjectURL(downloadUrl);
+                                },
+                                100);
+                        }
+                    },
+                });
+            });
+        });
+    </script>
+</head>
+<nav class="navbar navbar-light bg-light">
+    <form class="form-inline">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR11CuKfgdBWTeKoOj9yZU-rz1QP7rrs7syg&usqp=CAU" width="206" height="57"></img>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-outline-success" href={{ url_for('upload') }}>Import .xlsx</a>&nbsp;
+        <a class="btn btn-outline-secondary" id="export-btn">Export .xlsx</a>&nbsp;
+        <a class="btn btn-outline-secondary" id="instructions-btn">Instructions</a>
+    </form>
+</nav>
+<body>
+<form class="container search-table" id="data">
+    <p>
+    <h2 align="center">WACL Organic Aerosol Mass Spectra Database</h2></p>
+    <div class="search-box">
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Search All</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="search_text" id="search_text" class="form-control" placeholder="Search All">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Compound Name</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="compound_name_search" id="compound_name_search" class="form-control"
+                       placeholder="Compound Name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Chemical Formula</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="chemical_formula_search" id="chemical_formula_search" class="form-control"
+                       placeholder="Chemical Formula">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Ionization</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="ionization_search" id="ionization_search" class="form-control"
+                       placeholder="Ionization">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Extracted Mass</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="extracted_mass_search" id="extracted_mass_search" class="form-control"
+                       placeholder="Extracted Mass">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>RT</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="rt_search" id="rt_search" class="form-control" placeholder="RT">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Collision Energy</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="collision_energy_search" id="collision_energy_search" class="form-control"
+                       placeholder="Collision Energy">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Confirm Extracted 1</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="confirm_extracted1_search" id="confirm_extracted1_search" class="form-control"
+                       placeholder="Confirm Extracted 1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Confirm Extracted 2</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="confirm_extracted2_search" id="confirm_extracted2_search" class="form-control"
+                       placeholder="Confirm Extracted 2">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Confirm Precursor 3</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="confirm_precursor3_search" id="confirm_precursor3_search" class="form-control"
+                       placeholder="Confirm Precursor 3">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Confirm Extracted 3</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="confirm_extracted3_search" id="confirm_extracted3_search" class="form-control"
+                       placeholder="Confirm Extracted 3">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Confirm Energy 3</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="confirm_energy3_search" id="confirm_energy3_search" class="form-control"
+                       placeholder="Confirm Energy 3">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Confirm Extracted 4</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="confirm_extracted4_search" id="confirm_extracted4_search" class="form-control"
+                       placeholder="Confirm Extracted 4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Fragment 1</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="fragment1_search" id="fragment1_search" class="form-control"
+                       placeholder="Fragment 1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Fragment 2</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="fragment2_search" id="fragment2_search" class="form-control"
+                       placeholder="Fragment 2">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Fragment 3</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="fragment3_search" id="fragment3_search" class="form-control"
+                       placeholder="Fragment 3">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Fragment 4</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="fragment4_search" id="fragment4_search" class="form-control"
+                       placeholder="Fragment 4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h6>Fragment 5</h6>
+            </div>
+            <div class="col-md-9">
+                <input type="text" name="fragment5_search" id="fragment5_search" class="form-control"
+                       placeholder="Fragment 5">
+            </div>
+        </div>
+    </div>
+</form>
+<div id="result"></div>
+</div>
+<style>
+    .search-table {
+        padding: 0%;
+        margin-top: 0%;
+    }
+
+    .search-box {
+        background: #c1c1c1;
+        border: 1px solid #ababab;
+        padding: 3%;
+    }
+
+    .search-box input:focus {
+        box-shadow: none;
+        border: 2px solid #eeeeee;
+    }
+
+    .search-list {
+        background: #fff;
+        border: 1px solid #ababab;
+        border-top: none;
+    }
+
+    .search-list h3 {
+        background: #eee;
+        padding: 3%;
+        color: #fe6f41;
+        margin-bottom: 0%;
+    }
+</style>
+</body>
+</html>

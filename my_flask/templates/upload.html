@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Import files</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $('#upload-file-btn').click(function () {
+                var form_data = new FormData($('#upload-file')[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: '/parse',
+                    data: form_data,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        window.location = '/';
+                    },
+                    error: function (){
+                        console.log('Error!');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<form id="upload-file" method="post" enctype="multipart/form-data">
+    <label for="file">Select a files</label>
+    <input name="file" type="file" multiple="">
+    <button id="upload-file-btn" type="button">Upload</button>
+</form>
+</body>
+</html>
