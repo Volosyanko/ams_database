@@ -88,6 +88,3 @@ The column headers in the excel file are as follows:
 * Fragment
 * Fragment
 * Fragment
-
-#### More Guidance
-Email andres.volosyanko@gmail.com for more information.
